@@ -93,10 +93,10 @@ public class UserService implements CommunityConstant {
 
     public int activate(int userId, String code) {
         User user = userMapper.selectById(userId);
-        if (user.getStatus() == 1) {
+        if (user.getStatus() == 1 && user.getActivationCode().equals(code)) {
             return ACTIVATION_REPEAT;
         }
-        else if (user.getActivationCode().equals(code)) {
+        else if (user.getStatus() == 0 && user.getActivationCode().equals(code)) {
             userMapper.updateStatus(userId, 1);
             return ACTIVATION_SUCCESS;
         } else {
