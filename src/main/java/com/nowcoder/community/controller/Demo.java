@@ -1,6 +1,7 @@
 package com.nowcoder.community.controller;
 
 import com.nowcoder.community.service.AlphaService;
+import com.nowcoder.community.util.CommunityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -9,11 +10,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/demo")
@@ -93,7 +96,21 @@ public class Demo {
         model.addAttribute("age", "30");
         return "/demo/view";
     }
-
+    @RequestMapping(path = "/cookie/set", method = RequestMethod.GET)
+    @ResponseBody
+    public String setCookie(HttpServletResponse httpServletResponse) {
+        Cookie cookie = new Cookie("name", CommunityUtil.generateUUID());
+        cookie.setPath("/community/demo");
+        cookie.setMaxAge(60 * 10);
+        httpServletResponse.addCookie(cookie);
+        return "set cookie success";
+    }
+    @RequestMapping(path = "/cookie/get", method = RequestMethod.GET)
+    @ResponseBody
+    public String getCookie(@CookieValue("name") String code) {
+        System.out.println(code);
+        return "get cookie success";
+    }
     //响应异步请求（JSON）
 }
 
