@@ -137,6 +137,7 @@ public class UserService implements CommunityConstant {
         password = CommunityUtil.md5(password + user.getSalt());
         if (!user.getPassword().equals(password)) {
             map.put("passwordMsg", "密码不正确！");
+            return map;
         }
 
         LoginTicket loginTicket = new LoginTicket();
