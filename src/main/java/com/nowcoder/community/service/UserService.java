@@ -124,6 +124,11 @@ public class UserService implements CommunityConstant {
         }
 
         User user = userMapper.selectByName(username);
+        if (user == null) {
+            map.put("usernameMsg", "该用户不存在");
+            return map;
+        }
+
         if (user.getStatus() == 0) {
             map.put("activateMsg", "账户未激活！");
             return map;
@@ -140,6 +145,12 @@ public class UserService implements CommunityConstant {
         loginTicket.setStatus(0);
         loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
         loginTicketMapper.insertLoginTicket(loginTicket);
+
+        map.put("ticket",loginTicket.getTicket());
         return map;
+    }
+
+    public void logout(String ticket) {
+        loginTicketMapper.updateStatus(ticket, 1);
     }
 }
