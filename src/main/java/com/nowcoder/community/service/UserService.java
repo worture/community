@@ -74,6 +74,16 @@ public class UserService implements CommunityConstant {
             return map;
         }
 
+        //发送激活邮件，改为先发送激活邮件再往数据库添加数据
+        Context context = new Context();
+        context.setVariable("email", user.getEmail());
+
+        //http:localhost:8080/community/activation/101/code
+
+        String url = domain + contextPath + "/activation/" + user.getId() + "/" + user.getActivationCode();
+        context.setVariable("url", url);
+        String content = templateEngine.process("/mail/activation", context);
+        mailClient.sendMail(user.getEmail(), "激活账号",content);
         //注册用户
         user.setSalt(CommunityUtil.generateUUID().substring(0,5));
         user.setPassword(CommunityUtil.md5(user.getPassword()+user.getSalt()));
@@ -84,16 +94,7 @@ public class UserService implements CommunityConstant {
         user.setCreateTime(new Date());
         userMapper.insertUser(user);
 
-        //发送激活邮件
-        Context context = new Context();
-        context.setVariable("email", user.getEmail());
 
-        //http:localhost:8080/community/activation/101/code
-
-        String url = domain + contextPath + "/activation/" + user.getId() + "/" + user.getActivationCode();
-        context.setVariable("url", url);
-        String content = templateEngine.process("/mail/activation", context);
-        mailClient.sendMail(user.getEmail(), "激活账号",content);
         return map;
     }
 
@@ -153,5 +154,9 @@ public class UserService implements CommunityConstant {
 
     public void logout(String ticket) {
         loginTicketMapper.updateStatus(ticket, 1);
+    }
+
+    public LoginTicket findLoginTicket(String ticket) {
+        return loginTicketMapper.selectByTicket(ticket);
     }
 }

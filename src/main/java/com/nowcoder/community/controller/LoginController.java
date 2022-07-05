@@ -126,7 +126,8 @@ public class LoginController implements CommunityConstant {
         } else {
             model.addAttribute("usernameMsg", map.get("usernameMsg"));
             model.addAttribute("passwordMsg", map.get("passwordMsg"));
-
+            //TODO 此处处理登录的账号未激活的情况
+            model.addAttribute("activateMsg", map.get("activateMsg"));
             return "/site/login";
         }
     }
