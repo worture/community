@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import sun.security.util.Password;
 
 import java.io.Closeable;
 import java.util.*;
@@ -52,8 +53,8 @@ public class UserService implements CommunityConstant {
             map.put("usernameMsg", "账号不能为空!");
             return map;
         }
-        if (StringUtils.isBlank(user.getPassword())) {
-            map.put("passwdMsg", "密码不能为空!");
+        if (StringUtils.isBlank(user.getPassword()) || user.getPassword().length() < 8) {
+            map.put("passwdMsg", "密码不能小于8位!");
             return map;
         }
         if (StringUtils.isBlank(user.getEmail())) {
@@ -93,8 +94,6 @@ public class UserService implements CommunityConstant {
         user.setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
         user.setCreateTime(new Date());
         userMapper.insertUser(user);
-
-
         return map;
     }
 
@@ -158,5 +157,16 @@ public class UserService implements CommunityConstant {
 
     public LoginTicket findLoginTicket(String ticket) {
         return loginTicketMapper.selectByTicket(ticket);
+    }
+
+    public int updateHeader(int userId, String headerUrl) {
+        return userMapper.updateHeader(userId, headerUrl);
+    }
+
+    public int updatePassword(String ticket, String newPassword) {
+        int userId = loginTicketMapper.selectByTicket(ticket).getUserId();
+        newPassword = CommunityUtil.md5(new Password() + userMapper.selectById(userId).getSalt());
+        int i = userMapper.updatePassword(userId, newPassword);
+        return i;
     }
 }
