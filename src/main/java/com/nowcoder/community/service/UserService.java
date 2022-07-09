@@ -165,7 +165,8 @@ public class UserService implements CommunityConstant {
 
     public int updatePassword(String ticket, String newPassword) {
         int userId = loginTicketMapper.selectByTicket(ticket).getUserId();
-        newPassword = CommunityUtil.md5(new Password() + userMapper.selectById(userId).getSalt());
+        //将新密码加上原来用户的盐值进行md5摘要后存入数据库
+        newPassword = CommunityUtil.md5(newPassword + userMapper.selectById(userId).getSalt());
         int i = userMapper.updatePassword(userId, newPassword);
         return i;
     }

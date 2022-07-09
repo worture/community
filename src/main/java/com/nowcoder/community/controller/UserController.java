@@ -119,9 +119,6 @@ public class UserController {
                                  @CookieValue("ticket") String ticket, Model model) {
         LoginTicket loginTicket = userService.findLoginTicket(ticket);
         User user = userService.getUserById(loginTicket.getUserId());
-        String password = user.getPassword();
-        String s = CommunityUtil.md5(oldPassword + user.getSalt());
-
         if (oldPassword.length() < 8 && !(CommunityUtil.md5(oldPassword+user.getSalt())).equals(user.getPassword())) {
             model.addAttribute("oldPasswordMsg", "密码长度不得小于8位！");
             return "site/setting";
