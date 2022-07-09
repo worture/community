@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 @Component
 public class LoginRequiredInterceptpr implements HandlerInterceptor {
 
+
     @Autowired
     private HostHolder hostHolder;
     @Override
