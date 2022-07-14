@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Controller
@@ -111,6 +112,14 @@ public class Demo {
         System.out.println(code);
         return "get cookie success";
     }
+
     //响应异步请求（JSON）
+    @RequestMapping(path = "/ajax", method = RequestMethod.POST)
+    @ResponseBody
+    public String testAjax(String name, int age) {
+        System.out.println(name);
+        System.out.println(age);
+        return CommunityUtil.getJSONString(0, "success!");
+    }
 }
 

@@ -25,7 +25,7 @@ public class HomeController {
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page) {
-        page.setRows(discussPostService.getDisussPostsRows(0));
+        page.setRows(discussPostService.getDiscussPostsRows(0));
         page.setPath("/index");
         List<DiscussPost> list = discussPostService.getDiscussPosts(0, page.getOffset(), page.getLimit());
         List<Map<String, Object>> discussPosts = new ArrayList<>();
