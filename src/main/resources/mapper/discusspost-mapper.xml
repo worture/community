@@ -44,4 +44,13 @@
         values (#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score})
     </insert>
 
+    <!--
+        DiscussPost selecDiscussPostById(int id);
+    -->
+    <select id="selecDiscussPostById" resultType="DiscussPost">
+        select <include refid="selectAll"></include>
+        from discuss_post
+        where id = #{id}
+    </select>
+
 </mapper>
