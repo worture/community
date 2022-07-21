@@ -41,7 +41,7 @@
     -->
     <insert id="insertDiscussPost" parameterType="DiscussPost">
         insert into discuss_post (<include refid="insertAll"></include>)
-        values (#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score})
+        values(#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score})
     </insert>
 
     <!--
@@ -52,5 +52,10 @@
         from discuss_post
         where id = #{id}
     </select>
-
+    <!--
+        int updateCommentCount(int id, int commentCount);
+    -->
+    <update id="updateCommentCount">
+        update discuss_post set comment_count = #{commentCount} where id = #{id}
+    </update>
 </mapper>
