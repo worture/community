@@ -2,9 +2,11 @@ package com.nowcoder.community;
 
 import com.nowcoder.community.dao.DiscussPostMapper;
 import com.nowcoder.community.dao.LoginTicketMapper;
+import com.nowcoder.community.dao.MessageMapper;
 import com.nowcoder.community.dao.UserMapper;
 import com.nowcoder.community.pojo.DiscussPost;
 import com.nowcoder.community.pojo.LoginTicket;
+import com.nowcoder.community.pojo.Message;
 import com.nowcoder.community.pojo.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,10 @@ public class MapperTests {
     private UserMapper userMapper;
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+
+    @Autowired
+    private MessageMapper messageMapper;
+
     @Test
     public void testSelectUser() {
         User user1 = userMapper.selectById(101);
@@ -92,5 +98,15 @@ public class MapperTests {
         loginTicketMapper.updateStatus(ticket, 0);
         loginTicket = loginTicketMapper.selectByTicket(ticket);
         System.out.println(loginTicket);
+    }
+
+    @Test
+    public void  testSelectMessages() {
+        List<Message> list = messageMapper.selectConversations(111, 0, 20);
+        for (Message message : list) {
+            System.out.println(message);
+        }
+
+        System.out.println(messageMapper.selectConversationCount(111));
     }
 }
